@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 import io from 'socket.io-client';
 
@@ -7,9 +8,12 @@ const socket = io.connect('http://localhost:3030');
 const Room = () => {
   const [msg, setMsg] = useState('');
   const [rMsg, setRmsg] = useState([]);
+  const { id } = useParams();
+  const [room, setRoom] = useState(id);
+
   const sendMsg = (e) => {
     e.preventDefault();
-    socket.emit('send_msg', { msg });
+    socket.emit('send_msg', { msg, room });
     const mtMsg = {
       who: 'me',
       msg,
@@ -17,6 +21,12 @@ const Room = () => {
     setRmsg(prev => [...prev, mtMsg])
     setMsg('');
   }
+
+  useEffect(() => {
+    if(room !== '') {
+      socket.emit('join_room', room);
+    }
+  }, [id])
 
   useEffect(() => {
     socket.on('receive_msg', data => {

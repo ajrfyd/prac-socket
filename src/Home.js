@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import io from 'socket.io-client';
+
+const socket = io.connect('http://localhost:3030');
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,6 +13,10 @@ const Home = () => {
     setRoom('');
     navigate(`/room/${room}`);
   }
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <div style={{ width: '100%', height: '400px', backgroundColor: 'yellow', padding: '1rem', textAlign: 'center', borderRadius: '5px' }}>
